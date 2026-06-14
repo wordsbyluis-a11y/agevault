@@ -19,7 +19,7 @@
   --bg-1:        #111113;
   --bg-2:        #18181b;
   --border:      rgba(255,255,255,.06);
-  --border-2:    rgba(255,255,255,.10);
+  --border-2:    rgba(255,255,255,.11);
   --gold:        #f5c518;
   --gold-dim:    rgba(245,197,24,.10);
   --gold-glow:   rgba(245,197,24,.18);
@@ -37,19 +37,33 @@
 html{scroll-behavior:smooth}
 body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{text-decoration:none}
-img,svg{display:block}
 
 /* ================================================================
-   AD SLOTS
+   AD SLOTS  — graceful collapse when empty
 ================================================================ */
 .ad-slot{width:100%;display:flex;justify-content:center;align-items:center;overflow:hidden;background:transparent}
 .ad-slot:empty,.ad-slot ins:not([data-ad-status="filled"]){min-height:0!important;padding:0!important}
+
 /* GOOGLE AD SLOT: TOP LEADERBOARD 728×90 */
 .ad-top{padding:10px 16px;background:var(--bg-1);border-bottom:1px solid var(--border);min-height:0}
 .ad-top ins{display:block;max-width:728px;width:100%}
-/* GOOGLE AD SLOT: MID RECTANGLE 336×280 */
-.ad-mid{padding:40px 16px;min-height:0}
-.ad-mid ins{display:block;max-width:336px;width:100%}
+
+/* GOOGLE AD SLOT: BELOW HERO 728×90 */
+.ad-below-hero{padding:20px 16px;background:var(--bg-1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);min-height:0}
+.ad-below-hero ins{display:block;max-width:728px;width:100%}
+
+/* GOOGLE AD SLOT: AFTER HOW-IT-WORKS 336×280 */
+.ad-after-how{padding:40px 16px;min-height:0}
+.ad-after-how ins{display:block;max-width:336px;width:100%}
+
+/* GOOGLE AD SLOT: AFTER TESTIMONIALS 728×90 */
+.ad-after-reviews{padding:20px 16px;background:var(--bg-1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);min-height:0}
+.ad-after-reviews ins{display:block;max-width:728px;width:100%}
+
+/* GOOGLE AD SLOT: AFTER PRICING 336×280 */
+.ad-after-pricing{padding:40px 16px;min-height:0}
+.ad-after-pricing ins{display:block;max-width:336px;width:100%}
+
 /* GOOGLE AD SLOT: FOOTER BANNER 320×50 */
 .ad-footer{padding:12px 16px;min-height:0}
 .ad-footer ins{display:block;max-width:320px;width:100%}
@@ -57,10 +71,10 @@ img,svg{display:block}
 /* ================================================================
    NAV
 ================================================================ */
-nav{position:sticky;top:0;z-index:100;background:rgba(9,9,11,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{position:sticky;top:0;z-index:200;background:rgba(9,9,11,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:0 24px;height:58px}
-.nav-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:1.05rem;color:var(--text);letter-spacing:-.02em}
-.nav-logo-icon{font-size:1rem;filter:drop-shadow(0 0 6px var(--gold-glow))}
+.nav-logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:1.05rem;color:var(--text);letter-spacing:-.02em}
+.nav-logo svg{color:var(--gold);flex-shrink:0;filter:drop-shadow(0 0 6px var(--gold-glow))}
 .nav-logo-name{background:linear-gradient(120deg,var(--gold),#fffde7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .nav-links{display:flex;align-items:center;gap:28px;list-style:none}
 .nav-links a{font-size:.875rem;font-weight:500;color:var(--text-2);transition:color .15s}
@@ -72,71 +86,113 @@ nav{position:sticky;top:0;z-index:100;background:rgba(9,9,11,.82);backdrop-filte
 /* ================================================================
    HERO
 ================================================================ */
-.hero-wrap{position:relative;padding:80px 24px 64px;text-align:center;overflow:hidden}
-.hero-wrap::before{content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:780px;height:600px;background:radial-gradient(ellipse at center top,rgba(245,197,24,.09) 0%,transparent 65%);pointer-events:none;z-index:0}
+.hero-wrap{position:relative;padding:80px 24px 56px;text-align:center;overflow:hidden}
+.hero-wrap::before{content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);width:780px;height:620px;background:radial-gradient(ellipse at center top,rgba(245,197,24,.09) 0%,transparent 65%);pointer-events:none;z-index:0}
 .hero-wrap>*{position:relative;z-index:1}
 
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:999px;padding:5px 14px;font-size:.72rem;font-weight:600;color:var(--gold);letter-spacing:.06em;text-transform:uppercase;margin-bottom:28px}
-.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:999px;padding:5px 14px;font-size:.7rem;font-weight:600;color:var(--gold);letter-spacing:.07em;text-transform:uppercase;margin-bottom:28px}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0}
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
 
 .hero-h1{font-size:clamp(2.1rem,6vw,3.75rem);font-weight:800;line-height:1.1;letter-spacing:-.04em;color:var(--text);max-width:740px;margin:0 auto 20px}
 .hero-h1 .gold{color:var(--gold)}
-.hero-sub{font-size:1.05rem;color:var(--text-2);max-width:460px;margin:0 auto 44px;line-height:1.7;font-weight:400}
+.hero-sub{font-size:1.05rem;color:var(--text-2);max-width:460px;margin:0 auto 28px;line-height:1.7;font-weight:400}
 
-/* ---- form card ---- */
+/* social proof strip */
+.social-proof{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:36px;flex-wrap:wrap}
+.social-avatars{display:flex;align-items:center}
+.s-av{width:30px;height:30px;border-radius:50%;background:var(--bg-2);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-left:-8px;flex-shrink:0}
+.s-av:first-child{margin-left:0}
+.social-text{font-size:.8rem;color:var(--text-2);line-height:1.4}
+.social-text strong{color:var(--text)}
+.social-stars{color:var(--gold);font-size:.7rem;letter-spacing:2px;display:block;margin-top:2px}
+
+/* form card */
 .form-card{background:rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-2);border-radius:20px;padding:36px 32px;width:100%;max-width:440px;margin:0 auto;box-shadow:0 32px 64px rgba(0,0,0,.4),0 0 0 .5px rgba(255,255,255,.04)}
 .form-card-title{font-size:.95rem;font-weight:700;margin-bottom:22px;color:var(--text);text-align:left}
 .field{margin-bottom:16px;text-align:left}
 .field label{display:block;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);margin-bottom:7px}
+.label-hint{font-weight:400;font-size:.66rem;letter-spacing:.02em;color:var(--text-3)}
 .field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border-2);border-radius:10px;color:var(--text);font-family:'Poppins',sans-serif;font-size:.95rem;padding:11px 14px;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
 .field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
 .field input::placeholder{color:var(--text-3)}
-.field input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.6);cursor:pointer}
+.field input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.5);cursor:pointer}
 .field input.has-err{border-color:var(--red)}
 .field-err{font-size:.7rem;color:var(--red);margin-top:5px;display:none}
 .field.err .field-err{display:block}
-.label-hint{color:var(--text-3);font-weight:400;font-size:.68rem;letter-spacing:.02em}
 
 .btn-primary{display:block;width:100%;background:var(--gold);color:#09090b;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:700;padding:13px 20px;cursor:pointer;margin-top:8px;transition:opacity .15s,box-shadow .15s,transform .12s;box-shadow:0 4px 16px var(--gold-glow);letter-spacing:.01em}
 .btn-primary:hover{opacity:.9;box-shadow:0 8px 24px rgba(245,197,24,.4);transform:translateY(-1px)}
 .btn-primary:active{transform:translateY(0)}
-.form-trust{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.72rem;color:var(--text-3);margin-top:14px}
+.form-trust{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.7rem;color:var(--text-3);margin-top:14px}
 
 /* ================================================================
-   RESULT SECTION
+   PAYWALL MODAL
 ================================================================ */
-#result-section{display:none;padding:0 24px 64px}
-#result-section.visible{display:flex;flex-direction:column;align-items:center;animation:fadeUp .5s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+#paywall-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
+#paywall-modal.open{display:flex;animation:fadeIn .25s ease both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-.result-card{position:relative;background:rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-2);border-radius:20px;padding:40px 32px;width:100%;max-width:560px;text-align:center;overflow:hidden;box-shadow:0 32px 64px rgba(0,0,0,.5)}
-.result-headline{font-size:.88rem;font-weight:500;color:var(--text-2);margin-bottom:28px;line-height:1.55}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 
-/* blurred stats */
-.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:32px;filter:blur(7px);user-select:none;pointer-events:none}
-@media(max-width:480px){.stats-grid{grid-template-columns:repeat(3,1fr)}}
-.stat-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:16px 6px}
-.stat-num{display:block;font-family:'JetBrains Mono',monospace;font-size:1.35rem;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 18px rgba(245,197,24,.55)}
-.stat-label{font-size:.58rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-top:6px}
+.modal-card{position:relative;z-index:1;background:var(--bg-1);border:1px solid var(--border-2);border-radius:20px;width:100%;max-width:500px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.7),0 0 0 .5px rgba(255,255,255,.05);animation:slideUp .3s cubic-bezier(.22,.61,.36,1) both}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* paywall overlay */
-.paywall-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(9,9,11,0) 0%,rgba(9,9,11,.85) 28%,rgba(9,9,11,.98) 52%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:32px 28px 36px;border-radius:20px}
-.paywall-lock{font-size:1.4rem;margin-bottom:10px;filter:drop-shadow(0 0 10px var(--gold-glow))}
-.paywall-title{font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em}
-.paywall-sub{font-size:.82rem;color:var(--text-2);margin-bottom:24px;line-height:1.55;max-width:300px;text-align:center}
-.btn-unlock{display:block;width:100%;max-width:300px;background:var(--gold);color:#09090b;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.93rem;font-weight:700;padding:13px 20px;cursor:pointer;text-align:center;margin-bottom:10px;transition:opacity .15s,box-shadow .15s,transform .12s;box-shadow:0 4px 20px rgba(245,197,24,.45)}
+.modal-top{padding:28px 28px 0;text-align:center}
+.modal-label{font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px}
+
+/* blurred preview inside modal */
+.modal-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:0 0 0;filter:blur(6px);user-select:none;pointer-events:none}
+@media(max-width:460px){.modal-stats{grid-template-columns:repeat(3,1fr)}}
+.modal-stat-box{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:14px 6px;text-align:center}
+.modal-stat-num{display:block;font-family:'JetBrains Mono',monospace;font-size:1.25rem;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 16px rgba(245,197,24,.55)}
+.modal-stat-lbl{font-size:.55rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-top:5px}
+
+.modal-paywall{padding:0 28px 28px;text-align:center;position:relative}
+/* gradient fade from modal-top into paywall */
+.modal-paywall::before{content:'';display:block;height:60px;margin:0 -28px 20px;background:linear-gradient(to bottom,rgba(17,17,19,0),rgba(17,17,19,1))}
+
+.modal-lock{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;background:var(--gold-dim);border:1px solid var(--gold-border);margin-bottom:14px}
+.modal-lock svg{color:var(--gold)}
+.modal-title{font-size:1.25rem;font-weight:800;color:var(--text);margin-bottom:8px;letter-spacing:-.02em}
+.modal-sub{font-size:.83rem;color:var(--text-2);line-height:1.6;margin-bottom:22px;max-width:340px;margin-left:auto;margin-right:auto}
+
+.btn-unlock{display:block;width:100%;background:var(--gold);color:#09090b;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.93rem;font-weight:700;padding:13px 20px;cursor:pointer;text-align:center;margin-bottom:10px;transition:opacity .15s,box-shadow .15s,transform .12s;box-shadow:0 4px 20px rgba(245,197,24,.45)}
 .btn-unlock:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 28px rgba(245,197,24,.5)}
-.btn-unlock-full{display:block;width:100%;max-width:300px;background:transparent;color:var(--gold);border:1px solid var(--gold-border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:.86rem;font-weight:600;padding:11px 20px;cursor:pointer;text-align:center;margin-bottom:16px;transition:background .15s,border-color .15s}
+.btn-unlock-full{display:block;width:100%;background:transparent;color:var(--gold);border:1px solid var(--gold-border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:.86rem;font-weight:600;padding:11px 20px;cursor:pointer;text-align:center;margin-bottom:16px;transition:background .15s,border-color .15s}
 .btn-unlock-full:hover{background:var(--gold-dim);border-color:rgba(245,197,24,.4)}
-.paywall-note{font-size:.68rem;color:var(--text-3)}
+.modal-note{font-size:.67rem;color:var(--text-3)}
+
+.modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:background .15s}
+.modal-close:hover{background:rgba(255,255,255,.1)}
+.modal-close svg{color:var(--text-3)}
+
+/* ================================================================
+   INLINE RESULT (shown after modal closes as persistent teaser)
+================================================================ */
+#result-section{display:none;padding:0 24px 0}
+#result-section.visible{display:flex;flex-direction:column;align-items:center;animation:fadeUp .5s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.result-card{position:relative;background:rgba(255,255,255,.02);border:1px solid var(--border-2);border-radius:20px;padding:32px;width:100%;max-width:560px;text-align:center;overflow:hidden;box-shadow:0 24px 48px rgba(0,0,0,.4)}
+.result-label{font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:16px}
+.result-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;filter:blur(6px);user-select:none;pointer-events:none;margin-bottom:0}
+@media(max-width:460px){.result-stats{grid-template-columns:repeat(3,1fr)}}
+.r-stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:14px 6px}
+.r-stat-num{display:block;font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 14px rgba(245,197,24,.5)}
+.r-stat-lbl{font-size:.55rem;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-top:5px}
+
+.result-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(9,9,11,0) 0%,rgba(9,9,11,.88) 36%,rgba(9,9,11,.99) 56%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:24px}
+.result-overlay-text{font-size:.82rem;color:var(--text-2);margin-bottom:12px}
+.btn-result-unlock{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:#09090b;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.85rem;font-weight:700;padding:10px 20px;cursor:pointer;transition:opacity .15s;box-shadow:0 4px 16px var(--gold-glow)}
+.btn-result-unlock:hover{opacity:.9}
 
 /* ================================================================
    SECTION UTILITIES
 ================================================================ */
 .section-wrap{padding:88px 24px;max-width:1100px;margin:0 auto}
-.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
-.section-title{font-size:clamp(1.65rem,3.5vw,2.4rem);font-weight:800;line-height:1.15;color:var(--text);margin-bottom:16px;letter-spacing:-.03em}
+.section-label{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.section-title{font-size:clamp(1.6rem,3.5vw,2.35rem);font-weight:800;line-height:1.15;color:var(--text);margin-bottom:16px;letter-spacing:-.03em}
 .section-sub{font-size:.95rem;color:var(--text-2);line-height:1.7;max-width:500px}
 .section-header{margin-bottom:52px}
 .separator{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);max-width:1100px;margin:0 auto}
@@ -148,10 +204,11 @@ nav{position:sticky;top:0;z-index:100;background:rgba(9,9,11,.82);backdrop-filte
 @media(max-width:768px){.how-grid{grid-template-columns:1fr}}
 .how-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:18px;padding:32px 26px;transition:border-color .2s,background .2s}
 .how-card:hover{border-color:var(--border-2);background:rgba(255,255,255,.033)}
-.how-step{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--gold);letter-spacing:.12em;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.how-step{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:var(--gold);letter-spacing:.12em;margin-bottom:20px;display:flex;align-items:center;gap:10px}
 .how-step::after{content:'';flex:1;height:1px;background:var(--border)}
-.how-icon{font-size:1.5rem;margin-bottom:14px;display:block;filter:drop-shadow(0 0 8px var(--gold-glow))}
-.how-card h3{font-size:.98rem;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:-.01em}
+.how-icon-box{width:44px;height:44px;border-radius:12px;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.how-icon-box svg{color:var(--gold)}
+.how-card h3{font-size:.97rem;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:-.01em}
 .how-card p{font-size:.855rem;color:var(--text-2);line-height:1.68}
 
 /* ================================================================
@@ -161,10 +218,10 @@ nav{position:sticky;top:0;z-index:100;background:rgba(9,9,11,.82);backdrop-filte
 @media(max-width:640px){.t-grid{grid-template-columns:1fr}}
 .t-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:18px;padding:26px;transition:border-color .2s}
 .t-card:hover{border-color:var(--border-2)}
-.t-stars{color:var(--gold);font-size:.82rem;letter-spacing:3px;margin-bottom:14px}
+.t-stars{color:var(--gold);font-size:.8rem;letter-spacing:3px;margin-bottom:14px}
 .t-quote{font-size:.875rem;line-height:1.72;color:var(--text-2);margin-bottom:20px;font-style:italic}
 .t-author{display:flex;align-items:center;gap:12px}
-.t-avatar{width:36px;height:36px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--gold);flex-shrink:0;font-family:'JetBrains Mono',monospace}
+.t-avatar{width:36px;height:36px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:var(--gold);flex-shrink:0;font-family:'JetBrains Mono',monospace}
 .t-name{font-size:.82rem;font-weight:600;color:var(--text)}
 .t-meta{font-size:.7rem;color:var(--text-3);margin-top:2px}
 
@@ -175,14 +232,15 @@ nav{position:sticky;top:0;z-index:100;background:rgba(9,9,11,.82);backdrop-filte
 @media(max-width:640px){.pricing-grid{grid-template-columns:1fr}}
 .pricing-card{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:18px;padding:32px 26px;position:relative}
 .pricing-card.featured{background:rgba(245,197,24,.04);border-color:var(--gold-border)}
-.pricing-card.featured::before{content:'Most Popular';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--gold);color:#09090b;font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:0 0 8px 8px}
-.pricing-tier{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-2);margin-bottom:10px}
+.pricing-card.featured::before{content:'Most Popular';position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--gold);color:#09090b;font-size:.6rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:0 0 8px 8px}
+.pricing-tier{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-2);margin-bottom:10px}
 .pricing-price{font-family:'JetBrains Mono',monospace;font-size:2.2rem;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:4px}
-.pricing-price-note{font-size:.75rem;color:var(--text-3);margin-bottom:24px}
+.pricing-price-note{font-size:.73rem;color:var(--text-3);margin-bottom:24px}
 .pricing-features{list-style:none;margin-bottom:26px}
 .pricing-features li{display:flex;align-items:flex-start;gap:10px;font-size:.855rem;color:var(--text-2);padding:7px 0;border-bottom:1px solid var(--border)}
 .pricing-features li:last-child{border-bottom:none}
-.check{width:16px;height:16px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:.52rem;font-weight:900;color:var(--gold)}
+.check{width:15px;height:15px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--gold-border);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.check svg{color:var(--gold)}
 .btn-plan{display:block;width:100%;text-align:center;padding:12px 20px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:700;transition:opacity .15s,box-shadow .15s,transform .12s,border-color .15s,background .15s}
 .btn-plan-gold{background:var(--gold);color:#09090b;box-shadow:0 4px 16px var(--gold-glow)}
 .btn-plan-gold:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 24px rgba(245,197,24,.4)}
@@ -196,10 +254,11 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
 .footer-inner{max-width:1100px;margin:0 auto}
 .footer-top{display:flex;align-items:flex-start;justify-content:space-between;gap:40px;margin-bottom:44px;flex-wrap:wrap}
 .footer-brand{max-width:250px}
-.footer-logo{display:flex;align-items:center;gap:7px;font-size:.98rem;font-weight:700;margin-bottom:10px}
+.footer-logo{display:flex;align-items:center;gap:8px;font-size:.98rem;font-weight:700;margin-bottom:10px}
+.footer-logo svg{color:var(--gold);filter:drop-shadow(0 0 4px var(--gold-glow))}
 .footer-logo-name{background:linear-gradient(120deg,var(--gold),#fffde7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .footer-brand p{font-size:.78rem;color:var(--text-3);line-height:1.65}
-.footer-col h4{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-2);margin-bottom:14px}
+.footer-col h4{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-2);margin-bottom:14px}
 .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
 .footer-col a{font-size:.83rem;color:var(--text-3);transition:color .15s}
 .footer-col a:hover{color:var(--text-2)}
@@ -214,17 +273,21 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
    RESPONSIVE
 ================================================================ */
 @media(max-width:640px){
-  .hero-wrap{padding:52px 20px 44px}
+  .hero-wrap{padding:52px 20px 40px}
   .form-card{padding:28px 20px;border-radius:16px}
-  .result-card{padding:32px 18px;border-radius:16px}
-  .paywall-overlay{padding:24px 18px 28px;border-radius:16px}
+  .modal-card{border-radius:16px}
+  .modal-top{padding:24px 20px 0}
+  .modal-paywall{padding:0 20px 24px}
   .section-wrap{padding:64px 16px}
+  .result-card{padding:24px 16px;border-radius:16px}
 }
   </style>
 </head>
 <body>
 
-<!-- GOOGLE AD SLOT: TOP LEADERBOARD 728×90 -->
+<!-- ============================================================
+     GOOGLE AD SLOT 1: TOP LEADERBOARD 728×90
+============================================================ -->
 <div class="ad-slot ad-top">
   <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
   <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
@@ -234,7 +297,7 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
 <nav aria-label="Main navigation">
   <div class="nav-inner">
     <a href="#top" class="nav-logo" aria-label="AgeVault home">
-      <span class="nav-logo-icon" aria-hidden="true">🔒</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       <span class="nav-logo-name">AgeVault</span>
     </a>
     <ul class="nav-links" role="list">
@@ -242,23 +305,41 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#reviews">Reviews</a></li>
     </ul>
-    <a href="#hero-form" class="nav-cta">Calculate Free →</a>
+    <a href="#hero-form" class="nav-cta">Calculate Free</a>
   </div>
 </nav>
 
 <!-- ── HERO ───────────────────────────────────────────────── -->
 <section class="hero-wrap" id="top" aria-labelledby="hero-h1">
-  <div class="hero-eyebrow" aria-label="Live calculation">
-    <span class="hero-eyebrow-dot" aria-hidden="true"></span>
-    Precise to the minute · No registration required
+  <div class="hero-eyebrow">
+    <span class="eyebrow-dot" aria-hidden="true"></span>
+    Precise to the minute &middot; No registration required
   </div>
+
   <h1 class="hero-h1" id="hero-h1">
     Know Exactly How Long<br>You've Been <span class="gold">Alive</span>
   </h1>
+
   <p class="hero-sub">
     Enter your date of birth and unlock a complete life report — years, months, days, hours and minutes, calculated in real time.
   </p>
 
+  <!-- Social proof -->
+  <div class="social-proof" aria-label="Social proof">
+    <div class="social-avatars" aria-hidden="true">
+      <div class="s-av">JK</div>
+      <div class="s-av">MA</div>
+      <div class="s-av">PR</div>
+      <div class="s-av">BT</div>
+      <div class="s-av">RL</div>
+    </div>
+    <div class="social-text">
+      <strong>349,609</strong> people worldwide have unlocked their report
+      <span class="social-stars" aria-label="Rated 4.9 out of 5">&#9733;&#9733;&#9733;&#9733;&#9733; 4.9</span>
+    </div>
+  </div>
+
+  <!-- Form -->
   <form class="form-card" id="hero-form" novalidate onsubmit="handleCalculate(event)">
     <p class="form-card-title">Calculate your exact age</p>
 
@@ -274,46 +355,43 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
       <div class="field-err" id="err-email" role="alert">Please enter a valid email address.</div>
     </div>
 
-    <button type="submit" class="btn-primary" id="btn-calculate">Calculate My Age →</button>
+    <button type="submit" class="btn-primary" id="btn-calculate">Show Me My Result</button>
 
     <p class="form-trust" aria-label="Privacy notice">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      No name needed · We never share your data
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      No name needed &middot; We never share your data
     </p>
   </form>
 </section>
 
-<!-- ── RESULT (hidden until calculation) ─────────────────── -->
-<section id="result-section" aria-live="polite" aria-label="Your age calculation result">
+<!-- ── INLINE RESULT TEASER (blurred, shown after modal dismissed) -->
+<section id="result-section" aria-label="Your age calculation — unlock to reveal">
   <div class="result-card">
-    <p class="result-headline">Your time on Earth has been calculated to the exact minute.</p>
-
-    <div class="stats-grid" id="stats-grid" aria-hidden="true">
-      <div class="stat-box"><span class="stat-num" id="stat-years">—</span><div class="stat-label">Years</div></div>
-      <div class="stat-box"><span class="stat-num" id="stat-months">—</span><div class="stat-label">Months</div></div>
-      <div class="stat-box"><span class="stat-num" id="stat-days">—</span><div class="stat-label">Days</div></div>
-      <div class="stat-box"><span class="stat-num" id="stat-hours">—</span><div class="stat-label">Hours</div></div>
-      <div class="stat-box"><span class="stat-num" id="stat-mins">—</span><div class="stat-label">Minutes</div></div>
+    <p class="result-label">Your Age Report</p>
+    <div class="result-stats" aria-hidden="true">
+      <div class="r-stat"><span class="r-stat-num" id="stat-years">—</span><div class="r-stat-lbl">Years</div></div>
+      <div class="r-stat"><span class="r-stat-num" id="stat-months">—</span><div class="r-stat-lbl">Months</div></div>
+      <div class="r-stat"><span class="r-stat-num" id="stat-days">—</span><div class="r-stat-lbl">Days</div></div>
+      <div class="r-stat"><span class="r-stat-num" id="stat-hours">—</span><div class="r-stat-lbl">Hours</div></div>
+      <div class="r-stat"><span class="r-stat-num" id="stat-mins">—</span><div class="r-stat-lbl">Minutes</div></div>
     </div>
-
-    <div class="paywall-overlay" role="complementary" aria-label="Unlock your full age report">
-      <div class="paywall-lock" aria-hidden="true">🔒</div>
-      <p class="paywall-title">Unlock Your Full Age Report</p>
-      <p class="paywall-sub">See your exact age to the minute, life milestones, and a countdown to your next birthday.</p>
-      <!--
-        STRIPE $4.99 — Product: prod_UhZsdqlX0F2jIE
-        Price: price_1TiArPIytX7fsF2vpQX4bIfv | Link: plink_1TiArWIytX7fsF2vwRzMQUrg
-      -->
-      <a href="https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00" class="btn-unlock" id="btn-unlock-basic" target="_blank" rel="noopener noreferrer">Unlock for $4.99</a>
-      <!--
-        STRIPE $9.99 — Product: prod_UhZsdqlX0F2jIE
-        Price: price_1TiArQIytX7fsF2v4CUxL4GH | Link: plink_1TiArYIytX7fsF2vi3JkENfy
-      -->
-      <a href="https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01" class="btn-unlock-full" id="btn-unlock-full" target="_blank" rel="noopener noreferrer">Unlock for $9.99 — Full Life Report</a>
-      <p class="paywall-note">One-time payment · Instant access · No subscription</p>
+    <div class="result-overlay">
+      <p class="result-overlay-text">Your report is ready — unlock to see the full results</p>
+      <button class="btn-result-unlock" onclick="openModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Unlock Report
+      </button>
     </div>
   </div>
 </section>
+
+<!-- ============================================================
+     GOOGLE AD SLOT 2: BELOW HERO 728×90
+============================================================ -->
+<div class="ad-slot ad-below-hero" style="margin-top:48px">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+</div>
 
 <!-- ── HOW IT WORKS ───────────────────────────────────────── -->
 <div class="separator"></div>
@@ -324,26 +402,44 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
     <p class="section-sub">No sign-up, no name required. Just your birth date and email — results in milliseconds.</p>
   </div>
   <div class="how-grid" role="list">
+
     <article class="how-card" role="listitem">
       <div class="how-step">STEP 01</div>
-      <span class="how-icon" aria-hidden="true">📅</span>
+      <div class="how-icon-box" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      </div>
       <h3>Enter Your Data</h3>
       <p>Select your date of birth and provide your email. No account, no name, no friction — the calculation starts instantly.</p>
     </article>
+
     <article class="how-card" role="listitem">
       <div class="how-step">STEP 02</div>
-      <span class="how-icon" aria-hidden="true">⚡</span>
+      <div class="how-icon-box" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
       <h3>Precision Analysis</h3>
       <p>Our algorithm converts your birth date into exact years, months, days, hours and minutes — live-updated as your life progresses in real time.</p>
     </article>
+
     <article class="how-card" role="listitem">
       <div class="how-step">STEP 03</div>
-      <span class="how-icon" aria-hidden="true">🔓</span>
+      <div class="how-icon-box" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+      </div>
       <h3>Unlock Your Life Report</h3>
       <p>Get your complete report: exact age to the minute, life milestones, statistical insights, and a precise countdown to your next birthday.</p>
     </article>
+
   </div>
 </section>
+
+<!-- ============================================================
+     GOOGLE AD SLOT 3: AFTER HOW-IT-WORKS 336×280
+============================================================ -->
+<div class="ad-slot ad-after-how">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="rectangle"></ins>
+  <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+</div>
 
 <!-- ── TESTIMONIALS ───────────────────────────────────────── -->
 <div class="separator"></div>
@@ -354,39 +450,47 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
   </div>
   <div class="t-grid">
     <article class="t-card">
-      <div class="t-stars" aria-label="5 out of 5 stars">★★★★★</div>
-      <p class="t-quote">"Seeing my age count down in real minutes made me stop procrastinating immediately. Best $5 I've ever spent. Oddly motivating."</p>
+      <div class="t-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <p class="t-quote">"Seeing my age counted in real minutes made me stop procrastinating immediately. Best $5 I've ever spent. Oddly motivating."</p>
       <div class="t-author">
         <div class="t-avatar" aria-hidden="true">MD</div>
-        <div><div class="t-name">Mark D.</div><div class="t-meta">34 years old · Prague</div></div>
+        <div><div class="t-name">Mark D.</div><div class="t-meta">34 years old &middot; Prague</div></div>
       </div>
     </article>
     <article class="t-card">
-      <div class="t-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <div class="t-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="t-quote">"I knew I was getting older, but seeing 15,000+ days as one number completely reframed how I think about time. Genuinely perspective-shifting."</p>
       <div class="t-author">
         <div class="t-avatar" aria-hidden="true">SK</div>
-        <div><div class="t-name">Sarah K.</div><div class="t-meta">42 years old · London</div></div>
+        <div><div class="t-name">Sarah K.</div><div class="t-meta">42 years old &middot; London</div></div>
       </div>
     </article>
     <article class="t-card">
-      <div class="t-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <div class="t-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="t-quote">"The birthday countdown was a feature I didn't know I needed. Now I check it every week. Simple, premium, worth every cent."</p>
       <div class="t-author">
         <div class="t-avatar" aria-hidden="true">AT</div>
-        <div><div class="t-name">Alex T.</div><div class="t-meta">28 years old · Berlin</div></div>
+        <div><div class="t-name">Alex T.</div><div class="t-meta">28 years old &middot; Berlin</div></div>
       </div>
     </article>
     <article class="t-card">
-      <div class="t-stars" aria-label="5 out of 5 stars">★★★★★</div>
+      <div class="t-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       <p class="t-quote">"Bought the full report as a birthday gift for my sister turning 30. She cried — the good kind. Worth it just for that reaction."</p>
       <div class="t-author">
         <div class="t-avatar" aria-hidden="true">PM</div>
-        <div><div class="t-name">Priya M.</div><div class="t-meta">31 years old · New York</div></div>
+        <div><div class="t-name">Priya M.</div><div class="t-meta">31 years old &middot; New York</div></div>
       </div>
     </article>
   </div>
 </section>
+
+<!-- ============================================================
+     GOOGLE AD SLOT 4: AFTER TESTIMONIALS 728×90
+============================================================ -->
+<div class="ad-slot ad-after-reviews">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+</div>
 
 <!-- ── PRICING ────────────────────────────────────────────── -->
 <div class="separator"></div>
@@ -401,37 +505,39 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
     <article class="pricing-card" aria-labelledby="plan-basic">
       <p class="pricing-tier">Basic Report</p>
       <p class="pricing-price" id="plan-basic">$4.99</p>
-      <p class="pricing-price-note">One-time · Instant access</p>
+      <p class="pricing-price-note">One-time &middot; Instant access</p>
       <ul class="pricing-features" aria-label="Included features">
-        <li><span class="check" aria-hidden="true">✓</span>Exact age to the minute</li>
-        <li><span class="check" aria-hidden="true">✓</span>Years, months, days, hours &amp; minutes</li>
-        <li><span class="check" aria-hidden="true">✓</span>Life percentage elapsed</li>
-        <li><span class="check" aria-hidden="true">✓</span>Shareable summary card</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Exact age to the minute</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Years, months, days, hours &amp; minutes</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Life percentage elapsed</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Shareable summary card</li>
       </ul>
       <!-- STRIPE $4.99 — plink_1TiArWIytX7fsF2vwRzMQUrg -->
-      <a href="https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00" class="btn-plan btn-plan-outline" target="_blank" rel="noopener noreferrer" aria-label="Get Basic Report for $4.99">Get Basic Report →</a>
+      <a href="https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00" class="btn-plan btn-plan-outline" target="_blank" rel="noopener noreferrer" aria-label="Get Basic Report for $4.99">Get Basic Report</a>
     </article>
 
     <article class="pricing-card featured" aria-labelledby="plan-full">
       <p class="pricing-tier">Full Life Analysis</p>
       <p class="pricing-price" id="plan-full">$9.99</p>
-      <p class="pricing-price-note">One-time · Instant access</p>
+      <p class="pricing-price-note">One-time &middot; Instant access</p>
       <ul class="pricing-features" aria-label="Included features">
-        <li><span class="check" aria-hidden="true">✓</span>Everything in Basic</li>
-        <li><span class="check" aria-hidden="true">✓</span>Countdown to next birthday</li>
-        <li><span class="check" aria-hidden="true">✓</span>Life milestones timeline</li>
-        <li><span class="check" aria-hidden="true">✓</span>Statistical life comparisons</li>
-        <li><span class="check" aria-hidden="true">✓</span>Downloadable PDF report</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Everything in Basic</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Countdown to next birthday</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Life milestones timeline</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Statistical life comparisons</li>
+        <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Downloadable PDF report</li>
       </ul>
       <!-- STRIPE $9.99 — plink_1TiArYIytX7fsF2vi3JkENfy -->
-      <a href="https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01" class="btn-plan btn-plan-gold" target="_blank" rel="noopener noreferrer" aria-label="Get Full Life Analysis for $9.99">Get Full Report →</a>
+      <a href="https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01" class="btn-plan btn-plan-gold" target="_blank" rel="noopener noreferrer" aria-label="Get Full Life Analysis for $9.99">Get Full Report</a>
     </article>
 
   </div>
 </section>
 
-<!-- GOOGLE AD SLOT: MID RECTANGLE 336×280 -->
-<div class="ad-slot ad-mid">
+<!-- ============================================================
+     GOOGLE AD SLOT 5: AFTER PRICING 336×280
+============================================================ -->
+<div class="ad-slot ad-after-pricing">
   <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="rectangle"></ins>
   <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
 </div>
@@ -442,7 +548,7 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-logo">
-          <span aria-hidden="true">🔒</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           <span class="footer-logo-name">AgeVault</span>
         </div>
         <p>Precision age calculation. We do not collect or store names. Your email is used solely to deliver your purchased report.</p>
@@ -472,17 +578,67 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
         <span class="footer-badge"><span class="footer-badge-dot" aria-hidden="true"></span>Privacy Protected</span>
       </div>
     </div>
-    <!-- GOOGLE AD SLOT: FOOTER BANNER 320×50 -->
-    <div class="ad-slot ad-footer" style="margin-top:20px">
+    <!-- ============================================================
+         GOOGLE AD SLOT 6: FOOTER BANNER 320×50
+    ============================================================ -->
+    <div class="ad-slot ad-footer" style="margin-top:24px">
       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="auto"></ins>
       <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
     </div>
   </div>
 </footer>
 
+<!-- ── PAYWALL MODAL ──────────────────────────────────────── -->
+<div id="paywall-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-backdrop" onclick="closeModal()"></div>
+  <div class="modal-card">
+
+    <!-- Close button -->
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <!-- Blurred stats preview -->
+    <div class="modal-top">
+      <p class="modal-label">Your result is ready</p>
+      <div class="modal-stats" aria-hidden="true">
+        <div class="modal-stat-box"><span class="modal-stat-num" id="m-years">—</span><div class="modal-stat-lbl">Years</div></div>
+        <div class="modal-stat-box"><span class="modal-stat-num" id="m-months">—</span><div class="modal-stat-lbl">Months</div></div>
+        <div class="modal-stat-box"><span class="modal-stat-num" id="m-days">—</span><div class="modal-stat-lbl">Days</div></div>
+        <div class="modal-stat-box"><span class="modal-stat-num" id="m-hours">—</span><div class="modal-stat-lbl">Hours</div></div>
+        <div class="modal-stat-box"><span class="modal-stat-num" id="m-mins">—</span><div class="modal-stat-lbl">Minutes</div></div>
+      </div>
+    </div>
+
+    <!-- Paywall -->
+    <div class="modal-paywall">
+      <div class="modal-lock" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <h2 class="modal-title" id="modal-title">Unlock Your Full Age Report</h2>
+      <p class="modal-sub">See your exact age to the minute, life milestones, and a precision countdown to your next birthday.</p>
+
+      <!--
+        STRIPE $4.99 — Product: prod_UhZsdqlX0F2jIE
+        Price: price_1TiArPIytX7fsF2vpQX4bIfv | Link: plink_1TiArWIytX7fsF2vwRzMQUrg
+      -->
+      <a href="https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00" class="btn-unlock" id="btn-modal-basic" target="_blank" rel="noopener noreferrer">Unlock for $4.99</a>
+
+      <!--
+        STRIPE $9.99 — Product: prod_UhZsdqlX0F2jIE
+        Price: price_1TiArQIytX7fsF2v4CUxL4GH | Link: plink_1TiArYIytX7fsF2vi3JkENfy
+      -->
+      <a href="https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01" class="btn-unlock-full" id="btn-modal-full" target="_blank" rel="noopener noreferrer">Unlock for $9.99 — Full Life Report</a>
+
+      <p class="modal-note">One-time payment &middot; Instant access &middot; No subscription</p>
+    </div>
+
+  </div>
+</div>
+
 <!-- ── JAVASCRIPT ─────────────────────────────────────────── -->
 <script>
-  /* validation */
+  /* ---- validation ---- */
   function setFieldErr(id, show) {
     document.getElementById(id).classList.toggle('err', show);
     const inp = document.querySelector('#' + id + ' input');
@@ -490,7 +646,7 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
   }
   function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
 
-  /* age calc */
+  /* ---- age calc ---- */
   function calcAge(dob) {
     const now = new Date(), born = new Date(dob), ms = now - born;
     const totalMinutes = Math.floor(ms / 60000);
@@ -502,25 +658,48 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
     return { years, totalMonths: years * 12 + months, totalDays, totalHours, totalMinutes };
   }
 
-  /* live ticker */
+  /* ---- live ticker ---- */
   let _dob = null, _tick = null;
-  function updateStats() {
+
+  function updateAllStats() {
     if (!_dob) return;
     const a = calcAge(_dob);
-    document.getElementById('stat-years').textContent  = a.years.toLocaleString();
-    document.getElementById('stat-months').textContent = a.totalMonths.toLocaleString();
-    document.getElementById('stat-days').textContent   = a.totalDays.toLocaleString();
-    document.getElementById('stat-hours').textContent  = a.totalHours.toLocaleString();
-    document.getElementById('stat-mins').textContent   = a.totalMinutes.toLocaleString();
+    const fmt = n => n.toLocaleString();
+    /* inline teaser */
+    document.getElementById('stat-years').textContent  = fmt(a.years);
+    document.getElementById('stat-months').textContent = fmt(a.totalMonths);
+    document.getElementById('stat-days').textContent   = fmt(a.totalDays);
+    document.getElementById('stat-hours').textContent  = fmt(a.totalHours);
+    document.getElementById('stat-mins').textContent   = fmt(a.totalMinutes);
+    /* modal */
+    document.getElementById('m-years').textContent  = fmt(a.years);
+    document.getElementById('m-months').textContent = fmt(a.totalMonths);
+    document.getElementById('m-days').textContent   = fmt(a.totalDays);
+    document.getElementById('m-hours').textContent  = fmt(a.totalHours);
+    document.getElementById('m-mins').textContent   = fmt(a.totalMinutes);
   }
+
   function startTicker(dob) {
     _dob = dob;
     if (_tick) clearInterval(_tick);
-    updateStats();
-    _tick = setInterval(updateStats, 60000);
+    updateAllStats();
+    _tick = setInterval(updateAllStats, 60000);
   }
 
-  /* main handler */
+  /* ---- modal ---- */
+  function openModal() {
+    document.getElementById('paywall-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('paywall-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  /* ---- main handler ---- */
   function handleCalculate(e) {
     if (e) e.preventDefault();
     const dob   = document.getElementById('inp-dob').value;
@@ -536,13 +715,18 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
 
     startTicker(dob);
 
+    /* prefill email on all Stripe links */
     const params = '?prefilled_email=' + encodeURIComponent(email);
-    document.getElementById('btn-unlock-basic').href = 'https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00' + params;
-    document.getElementById('btn-unlock-full').href  = 'https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01' + params;
+    const base49 = 'https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00';
+    const base99 = 'https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01';
+    document.getElementById('btn-modal-basic').href = base49 + params;
+    document.getElementById('btn-modal-full').href  = base99 + params;
 
-    const rs = document.getElementById('result-section');
-    rs.classList.add('visible');
-    setTimeout(() => rs.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    /* show inline teaser */
+    document.getElementById('result-section').classList.add('visible');
+
+    /* open paywall modal immediately */
+    openModal();
   }
 
   document.addEventListener('keydown', function(e) {
