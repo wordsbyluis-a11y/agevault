@@ -270,6 +270,20 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
 @media(max-width:640px){.footer-top{flex-direction:column}.footer-bottom{flex-direction:column;align-items:flex-start}}
 
 /* ================================================================
+   PAYMENT STATUS BANNER
+================================================================ */
+.pay-banner{display:none;align-items:center;justify-content:center;gap:10px;padding:13px 20px;font-size:.83rem;font-weight:600;text-align:center}
+.pay-banner.show{display:flex}
+.pay-banner-success{background:#14532d;color:#bbf7d0;border-bottom:1px solid #166534}
+.pay-banner-cancelled{background:#1c1917;color:#a8a29e;border-bottom:1px solid var(--border)}
+.pay-banner svg{flex-shrink:0}
+
+/* button loading state */
+.btn-loading{opacity:.65;pointer-events:none;cursor:not-allowed}
+.btn-spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.25);border-top-color:#09090b;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ================================================================
    RESPONSIVE
 ================================================================ */
 @media(max-width:640px){
@@ -291,6 +305,16 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
 <div class="ad-slot ad-top">
   <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
   <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+</div>
+
+<!-- ── PAYMENT STATUS BANNERS (shown on return from Stripe) ── -->
+<div id="banner-success" class="pay-banner pay-banner-success" role="status" aria-live="polite">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+  Payment successful — your report is on its way to your inbox. Check your spam folder if it doesn't arrive within a few minutes.
+</div>
+<div id="banner-cancelled" class="pay-banner pay-banner-cancelled" role="status" aria-live="polite">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+  Payment cancelled — no charge was made. You can try again whenever you're ready.
 </div>
 
 <!-- ── NAVBAR ─────────────────────────────────────────────── -->
@@ -512,8 +536,8 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
         <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Life percentage elapsed</li>
         <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Shareable summary card</li>
       </ul>
-      <!-- STRIPE $4.99 — plink_1TiArWIytX7fsF2vwRzMQUrg -->
-      <a href="https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00" class="btn-plan btn-plan-outline" target="_blank" rel="noopener noreferrer" aria-label="Get Basic Report for $4.99">Get Basic Report</a>
+      <!-- pricing button: uses API if DOB is already entered, else scrolls to form -->
+      <button class="btn-plan btn-plan-outline" onclick="checkoutOrScroll('basic', this)" aria-label="Get Basic Report for $4.99">Get Basic Report</button>
     </article>
 
     <article class="pricing-card featured" aria-labelledby="plan-full">
@@ -527,8 +551,7 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
         <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Statistical life comparisons</li>
         <li><span class="check" aria-hidden="true"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></span>Downloadable PDF report</li>
       </ul>
-      <!-- STRIPE $9.99 — plink_1TiArYIytX7fsF2vi3JkENfy -->
-      <a href="https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01" class="btn-plan btn-plan-gold" target="_blank" rel="noopener noreferrer" aria-label="Get Full Life Analysis for $9.99">Get Full Report</a>
+      <button class="btn-plan btn-plan-gold" onclick="checkoutOrScroll('full', this)" aria-label="Get Full Life Analysis for $9.99">Get Full Report</button>
     </article>
 
   </div>
@@ -621,14 +644,16 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
       <!--
         STRIPE $4.99 — Product: prod_UhZsdqlX0F2jIE
         Price: price_1TiArPIytX7fsF2vpQX4bIfv | Link: plink_1TiArWIytX7fsF2vwRzMQUrg
+        Payment goes through /api/create-session so DOB is stored in metadata
+        and the webhook sends the report email automatically.
       -->
-      <a href="https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00" class="btn-unlock" id="btn-modal-basic" target="_blank" rel="noopener noreferrer">Unlock for $4.99</a>
+      <button class="btn-unlock" id="btn-modal-basic" onclick="checkout('basic', this)">Unlock for $4.99</button>
 
       <!--
         STRIPE $9.99 — Product: prod_UhZsdqlX0F2jIE
         Price: price_1TiArQIytX7fsF2v4CUxL4GH | Link: plink_1TiArYIytX7fsF2vi3JkENfy
       -->
-      <a href="https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01" class="btn-unlock-full" id="btn-modal-full" target="_blank" rel="noopener noreferrer">Unlock for $9.99 — Full Life Report</a>
+      <button class="btn-unlock-full" id="btn-modal-full" onclick="checkout('full', this)">Unlock for $9.99 — Full Life Report</button>
 
       <p class="modal-note">One-time payment &middot; Instant access &middot; No subscription</p>
     </div>
@@ -638,6 +663,11 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
 
 <!-- ── JAVASCRIPT ─────────────────────────────────────────── -->
 <script>
+  /* ---- state ---- */
+  let _dob   = null;
+  let _email = null;
+  let _tick  = null;
+
   /* ---- validation ---- */
   function setFieldErr(id, show) {
     document.getElementById(id).classList.toggle('err', show);
@@ -659,26 +689,22 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
   }
 
   /* ---- live ticker ---- */
-  let _dob = null, _tick = null;
-
   function updateAllStats() {
     if (!_dob) return;
-    const a = calcAge(_dob);
+    const a   = calcAge(_dob);
     const fmt = n => n.toLocaleString();
-    /* inline teaser */
-    document.getElementById('stat-years').textContent  = fmt(a.years);
-    document.getElementById('stat-months').textContent = fmt(a.totalMonths);
-    document.getElementById('stat-days').textContent   = fmt(a.totalDays);
-    document.getElementById('stat-hours').textContent  = fmt(a.totalHours);
-    document.getElementById('stat-mins').textContent   = fmt(a.totalMinutes);
-    /* modal */
-    document.getElementById('m-years').textContent  = fmt(a.years);
-    document.getElementById('m-months').textContent = fmt(a.totalMonths);
-    document.getElementById('m-days').textContent   = fmt(a.totalDays);
-    document.getElementById('m-hours').textContent  = fmt(a.totalHours);
-    document.getElementById('m-mins').textContent   = fmt(a.totalMinutes);
+    const pairs = [
+      ['stat-years', 'm-years',   a.years],
+      ['stat-months','m-months',  a.totalMonths],
+      ['stat-days',  'm-days',    a.totalDays],
+      ['stat-hours', 'm-hours',   a.totalHours],
+      ['stat-mins',  'm-mins',    a.totalMinutes],
+    ];
+    pairs.forEach(([sid, mid, val]) => {
+      document.getElementById(sid).textContent = fmt(val);
+      document.getElementById(mid).textContent = fmt(val);
+    });
   }
-
   function startTicker(dob) {
     _dob = dob;
     if (_tick) clearInterval(_tick);
@@ -699,39 +725,91 @@ footer{border-top:1px solid var(--border);padding:52px 24px 24px}
     if (e.key === 'Escape') closeModal();
   });
 
-  /* ---- main handler ---- */
+  /* ---- checkout via API (so DOB goes into Stripe metadata) ---- */
+  async function checkout(plan, btn) {
+    if (!_dob || !_email) {
+      /* shouldn't happen from modal, but guard anyway */
+      document.getElementById('top').scrollIntoView({ behavior: 'smooth' });
+      closeModal();
+      return;
+    }
+
+    /* loading state */
+    const origText = btn.innerHTML;
+    btn.classList.add('btn-loading');
+    btn.innerHTML = '<span class="btn-spinner"></span>Redirecting…';
+
+    try {
+      const res  = await fetch('/api/create-session', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ dob: _dob, email: _email, plan }),
+      });
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
+      btn.innerHTML = 'Error — try again';
+      setTimeout(() => {
+        btn.classList.remove('btn-loading');
+        btn.innerHTML = origText;
+      }, 2500);
+    }
+  }
+
+  /* ---- pricing section buttons (need form filled first) ---- */
+  function checkoutOrScroll(plan, btn) {
+    if (_dob && _email) {
+      checkout(plan, btn);
+    } else {
+      document.getElementById('hero-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('inp-dob').focus();
+    }
+  }
+
+  /* ---- form handler ---- */
   function handleCalculate(e) {
     if (e) e.preventDefault();
     const dob   = document.getElementById('inp-dob').value;
     const email = document.getElementById('inp-email').value.trim();
     const today = new Date().toISOString().slice(0, 10);
-    let valid = true;
+    let valid   = true;
 
-    if (!dob || dob >= today) { setFieldErr('field-dob', true);   valid = false; }
-    else                       { setFieldErr('field-dob', false); }
+    if (!dob || dob >= today) { setFieldErr('field-dob',   true);  valid = false; }
+    else                       { setFieldErr('field-dob',   false); }
     if (!isEmail(email))       { setFieldErr('field-email', true);  valid = false; }
     else                       { setFieldErr('field-email', false); }
     if (!valid) return;
 
+    _dob   = dob;
+    _email = email;
     startTicker(dob);
 
-    /* prefill email on all Stripe links */
-    const params = '?prefilled_email=' + encodeURIComponent(email);
-    const base49 = 'https://buy.stripe.com/test_8x200k4hs2wBdP554NbEA00';
-    const base99 = 'https://buy.stripe.com/test_28E14obJUgnrdP5dBjbEA01';
-    document.getElementById('btn-modal-basic').href = base49 + params;
-    document.getElementById('btn-modal-full').href  = base99 + params;
-
-    /* show inline teaser */
     document.getElementById('result-section').classList.add('visible');
-
-    /* open paywall modal immediately */
     openModal();
   }
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && document.activeElement.closest('#hero-form')) handleCalculate(e);
   });
+
+  /* ---- handle Stripe return URLs (?payment=success / cancelled) ---- */
+  (function checkPaymentReturn() {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('payment') === 'success') {
+      document.getElementById('banner-success').classList.add('show');
+      /* clean URL without reload */
+      history.replaceState(null, '', window.location.pathname);
+    } else if (p.get('payment') === 'cancelled') {
+      document.getElementById('banner-cancelled').classList.add('show');
+      history.replaceState(null, '', window.location.pathname);
+    }
+  })();
 </script>
 </body>
 </html>
