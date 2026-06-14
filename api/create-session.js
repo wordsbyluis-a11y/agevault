@@ -1,9 +1,37 @@
-const Stripe = require('stripe');
+const https = require('https');
+const querystring = require('querystring');
 
 const PRICE_IDS = {
-  basic: 'price_1TiArPIytX7fsF2vpQX4bIfv', // $4.99
-  full:  'price_1TiArQIytX7fsF2v4CUxL4GH', // $9.99
+  basic: 'price_1TiArPIytX7fsF2vpQX4bIfv',
+  full:  'price_1TiArQIytX7fsF2v4CUxL4GH',
 };
+
+function stripePost(path, params, secretKey) {
+  const body = querystring.stringify(params);
+  return new Promise((resolve, reject) => {
+    const req = https.request({
+      hostname: 'api.stripe.com',
+      port: 443,
+      path,
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + Buffer.from(secretKey + ':').toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(body),
+      },
+    }, (res) => {
+      let data = '';
+      res.on('data', c => (data += c));
+      res.on('end', () => {
+        try { resolve({ status: res.statusCode, body: JSON.parse(data) }); }
+        catch (e) { reject(new Error('Bad JSON: ' + data)); }
+      });
+    });
+    req.on('error', reject);
+    req.write(body);
+    req.end();
+  });
+}
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,24 +58,34 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Missing dob, email, or plan' });
   }
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) return res.status(500).json({ error: 'Stripe key not set' });
+
   const base = process.env.SITE_URL ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [{ price: PRICE_IDS[plan], quantity: 1 }],
-      mode: 'payment',
-      customer_email: email,
-      metadata: { dob, email, plan },
-      success_url: `${base}?payment=success&plan=${plan}`,
-      cancel_url:  `${base}?payment=cancelled`,
-    });
+    const result = await stripePost('/v1/checkout/sessions', {
+      'payment_method_types[]': 'card',
+      'line_items[0][price]': PRICE_IDS[plan],
+      'line_items[0][quantity]': '1',
+      'mode': 'payment',
+      'customer_email': email,
+      'metadata[dob]': dob,
+      'metadata[email]': email,
+      'metadata[plan]': plan,
+      'success_url': `${base}?payment=success&plan=${plan}`,
+      'cancel_url': `${base}?payment=cancelled`,
+    }, secretKey);
 
-    return res.status(200).json({ url: session.url });
+    if (result.status !== 200) {
+      console.error('Stripe error:', result.body);
+      return res.status(500).json({ error: result.body?.error?.message || 'Stripe error' });
+    }
+
+    return res.status(200).json({ url: result.body.url });
   } catch (err) {
-    console.error('Stripe error:', err.message);
+    console.error('Request error:', err.message);
     return res.status(500).json({ error: err.message });
   }
 };
